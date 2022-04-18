@@ -3,21 +3,24 @@ package com.example.codelab1
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
 import com.example.codelab1.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private var mReciever: CustomReciever = CustomReciever()
+    private val ACTION_CUSTOM_BROADCAST = BuildConfig.APPLICATION_ID + ".ACTION_CUSTOM_BROADCAST"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +43,15 @@ class MainActivity : AppCompatActivity() {
         intentFilter.addAction(Intent.ACTION_POWER_CONNECTED)
         intentFilter.addAction(Intent.ACTION_POWER_DISCONNECTED)
         this.registerReceiver(mReciever, intentFilter)
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReciever,
+            IntentFilter(ACTION_CUSTOM_BROADCAST))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReciever)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -63,4 +75,10 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
+    fun sendCustomBroadcast(view: View){
+        val customBroadcastIntent = Intent(ACTION_CUSTOM_BROADCAST)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(customBroadcastIntent)
+    }
+
 }

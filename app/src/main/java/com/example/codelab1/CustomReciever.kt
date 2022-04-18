@@ -7,11 +7,17 @@ import android.widget.Toast
 import java.lang.StringBuilder
 
 class CustomReciever : BroadcastReceiver() {
+    private val ACTION_CUSTOM_BROADCAST = BuildConfig.APPLICATION_ID + ".ACTION_CUSTOM_BROADCAST"
 
     override fun onReceive(context: Context, intent: Intent) {
-        StringBuilder().apply {
-            append("customRec ${intent.action}\n")
-            Toast.makeText(context, toString(), Toast.LENGTH_SHORT).show()
+        when(intent.action){
+            Intent.ACTION_POWER_CONNECTED-> showMessage(context,"Connected")
+            Intent.ACTION_POWER_DISCONNECTED-> showMessage(context,"Disconnected")
+            ACTION_CUSTOM_BROADCAST-> showMessage(context,"Custom action received")
         }
+    }
+
+    private fun showMessage(context: Context, msg: String?){
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 }
