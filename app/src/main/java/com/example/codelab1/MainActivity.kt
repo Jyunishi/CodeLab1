@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.findNavController
@@ -14,6 +15,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.codelab1.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -78,6 +80,7 @@ class MainActivity : AppCompatActivity() {
 
     fun sendCustomBroadcast(view: View){
         val customBroadcastIntent = Intent(ACTION_CUSTOM_BROADCAST)
+        customBroadcastIntent.putExtra("randNumber", Random.nextInt(0, 20))
         LocalBroadcastManager.getInstance(this).sendBroadcast(customBroadcastIntent)
     }
 

@@ -13,7 +13,11 @@ class CustomReciever : BroadcastReceiver() {
         when(intent.action){
             Intent.ACTION_POWER_CONNECTED-> showMessage(context,"Connected")
             Intent.ACTION_POWER_DISCONNECTED-> showMessage(context,"Disconnected")
-            ACTION_CUSTOM_BROADCAST-> showMessage(context,"Custom action received")
+            ACTION_CUSTOM_BROADCAST-> {
+                val intFromExtras = intent.getIntExtra("randNumber", 0)
+                showMessage(context, "Custom action received" + "\n" +
+                        (intFromExtras * intFromExtras))
+            }
         }
     }
 
@@ -21,3 +25,4 @@ class CustomReciever : BroadcastReceiver() {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 }
+
